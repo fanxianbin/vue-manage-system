@@ -56,12 +56,6 @@
                     }
                 }
             }
-        },
-        created(){
-            // 通过 Event Bus 进行组件间通信，来折叠侧边栏
-            // bus.$on('collapse', msg => {
-            //     this.collapse = msg;
-            // })
         }
     }
 </script>
@@ -71,7 +65,7 @@
         display: block;
         position: absolute;
         left: 0;
-        top: 50px;
+        top: 0;
         bottom:0;
         overflow-y: scroll;
     }
@@ -79,7 +73,7 @@
         width: 0;
     }
     .sidebar-el-menu:not(.el-menu--collapse){
-        width: 250px;
+        width: 200px;
     }
     .sidebar > ul {
         height:100%;

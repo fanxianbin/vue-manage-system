@@ -1,10 +1,10 @@
 <template>
     <div class="wrapper">
-        <el-container>
-            <el-header>
+        <el-container style="height:100%">
+            <el-header style="height:50px;">
                 <v-head></v-head>
             </el-header>
-            <el-footer>
+            <el-container style="height:100%;position:relative">
                 <el-aside>
                     <v-sidebar></v-sidebar>
                 </el-aside>
@@ -20,7 +20,7 @@
                         </div>
                     </div>
                 </el-main>
-            </el-footer>
+            </el-container>
         </el-container>
     </div>
 </template>

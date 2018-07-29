@@ -22,9 +22,9 @@ a {
 
 .content-box {
     position: absolute;
-    left: 250px;
+    left: 200px;
     right: 0;
-    top: 50px;
+    top: 0;
     bottom: 0;
     -webkit-transition: left .3s ease-in-out;
     transition: left .3s ease-in-out;
