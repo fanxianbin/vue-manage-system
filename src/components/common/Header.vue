@@ -14,10 +14,10 @@
             background-color="#242f42"
             text-color="#fff"
             active-text-color="#ffd04b">
-                <el-menu-item index="1">处理中心</el-menu-item>
-                <el-menu-item index="2">工作平台</el-menu-item>
-                <el-menu-item index="3">消息中心</el-menu-item>
-                <el-menu-item index="4">订单管理</el-menu-item>
+                <el-menu-item index="deal-center">处理中心</el-menu-item>
+                <el-menu-item index="workplat">工作平台</el-menu-item>
+                <el-menu-item index="msg-center">消息中心</el-menu-item>
+                <el-menu-item index="order-manager">订单管理</el-menu-item>
             </el-menu>
         </div>
         <div class="header-right">
@@ -60,26 +60,31 @@
 </template>
 <script>
     import bus from '../common/bus';
+    import store from '@/store/store'
     export default {
         data() {
             return {
-                collapse: false,
                 fullscreen: false,
                 name: 'linxin',
                 message: 2,
-                activeIndex:'1'
+                activeIndex:'deal-center'
             }
         },
         computed:{
             username(){
                 let username = localStorage.getItem('ms_username');
                 return username ? username : this.name;
-            }
+            },
+            // collapse(){
+            //     console.log(store.state.mainMenuItemCollapse);
+            //     return store.state.mainMenuItemCollapse;
+            // }
         },
         methods:{
             //主菜单切换
-            handleSelect(){
-
+            handleSelect(index){
+                this.activeIndex = index;
+                store.commit("setMainMenuActiveIndex",index);
             },
             // 用户名下拉菜单选择事件
             handleCommand(command) {
@@ -90,8 +95,9 @@
             },
             // 侧边栏折叠
             collapseChage(){
-                this.collapse = !this.collapse;
-                bus.$emit('collapse', this.collapse);
+                // this.collapse = !this.collapse;
+                // bus.$emit('collapse', this.collapse);
+                store.commit("setMainMenuItemCollapse");
             },
             // 全屏事件
             handleFullScreen(){

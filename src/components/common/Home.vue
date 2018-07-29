@@ -30,21 +30,25 @@
     import vSidebar from './Sidebar.vue';
     import vTags from './Tags.vue';
     import bus from './bus';
+    import store from '@/store/store'
     export default {
         data(){
             return {
                 tagsList: [],
-                collapse: false
+            }
+        },
+        computed:{
+            collapse(){
+                return store.state.mainMenuItemCollapse;
             }
         },
         components:{
             vHead, vSidebar, vTags
         },
         created(){
-            bus.$on('collapse', msg => {
-                this.collapse = msg;
-            })
-
+            // bus.$on('collapse', msg => {
+            //     this.collapse = msg;
+            // })
             // 只有在标签页列表里的页面才使用keep-alive，即关闭标签之后就不保存到内存中了。
             bus.$on('tags', msg => {
                 let arr = [];
