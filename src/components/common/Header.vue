@@ -5,6 +5,21 @@
             <i class="el-icon-menu"></i>
         </div>
         <div class="logo">后台管理系统</div>
+        <div class="main-menu">
+            <el-menu
+            :default-active="activeIndex"
+            class="el-menu-demo"
+            mode="horizontal"
+            @select="handleSelect"
+            background-color="#242f42"
+            text-color="#fff"
+            active-text-color="#ffd04b">
+                <el-menu-item index="1">处理中心</el-menu-item>
+                <el-menu-item index="2">工作平台</el-menu-item>
+                <el-menu-item index="3">消息中心</el-menu-item>
+                <el-menu-item index="4">订单管理</el-menu-item>
+            </el-menu>
+        </div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
@@ -51,7 +66,8 @@
                 collapse: false,
                 fullscreen: false,
                 name: 'linxin',
-                message: 2
+                message: 2,
+                activeIndex:'1'
             }
         },
         computed:{
@@ -61,6 +77,10 @@
             }
         },
         methods:{
+            //主菜单切换
+            handleSelect(){
+
+            },
             // 用户名下拉菜单选择事件
             handleCommand(command) {
                 if(command == 'loginout'){
@@ -108,12 +128,12 @@
         }
     }
 </script>
-<style scoped>
+<style lang="scss" scoped>
+    $height: 50px;
     .header {
-        position: relative;
         box-sizing: border-box;
         width: 100%;
-        height: 70px;
+        height: $height;
         font-size: 22px;
         color: #fff;
     }
@@ -121,12 +141,12 @@
         float: left;
         padding: 0 21px;
         cursor: pointer;
-        line-height: 70px;
+        line-height: $height;
     }
     .header .logo{
         float: left;
-        width:250px;
-        line-height: 70px;
+        width:200px;
+        line-height: $height;
     }
     .header-right{
         float: right;
@@ -134,8 +154,14 @@
     }
     .header-user-con{
         display: flex;
-        height: 70px;
+        height: $height;
         align-items: center;
+    }
+    .header .main-menu{
+        float: left;
+        li{
+            height:$height;
+        }
     }
     .btn-fullscreen{
         transform: rotate(45deg);

@@ -1,17 +1,27 @@
 <template>
     <div class="wrapper">
-        <v-head></v-head>
-        <v-sidebar></v-sidebar>
-        <div class="content-box" :class="{'content-collapse':collapse}">
-            <v-tags></v-tags>
-            <div class="content">
-                <transition name="move" mode="out-in">
-                    <keep-alive :include="tagsList">
-                        <router-view></router-view>
-                    </keep-alive>
-                </transition>
-            </div>
-        </div>
+        <el-container>
+            <el-header>
+                <v-head></v-head>
+            </el-header>
+            <el-footer>
+                <el-aside>
+                    <v-sidebar></v-sidebar>
+                </el-aside>
+                <el-main>
+                    <div class="content-box" :class="{'content-collapse':collapse}">
+                        <v-tags></v-tags>
+                        <div class="content">
+                            <transition name="move" mode="out-in">
+                                <keep-alive :include="tagsList">
+                                    <router-view></router-view>
+                                </keep-alive>
+                            </transition>
+                        </div>
+                    </div>
+                </el-main>
+            </el-footer>
+        </el-container>
     </div>
 </template>
 
@@ -46,3 +56,9 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    .el-header{
+        padding:0;
+    }
+</style>
