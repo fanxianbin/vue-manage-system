@@ -4,21 +4,21 @@
             <el-header style="height:50px;">
                 <v-head></v-head>
             </el-header>
-            <el-container style="height:100%;position:relative;left:0;top:0">
+            <el-container style="position:relative;left:0;top:0">
                 <el-aside class="sidebar">
                     <v-sidebar></v-sidebar>
                 </el-aside>
-                <el-main id="content-box" class="content-box" style="padding:0" :class="{'content-collapse':collapse}">
+                <el-main id="content-box" class="content-box" style="padding:0;" :class="{'content-collapse':collapse}">
                         <!-- 如果当前页面是导航页则显示导航标签，如果是详情页则显示为面包屑 -->
                         <v-tags class="fixed-tags"></v-tags>
-                        <div style="height:25px"></div>
+                        <!-- <div style="height:25px;width:100%;"></div> -->
                         <div class="content">
-                            <!-- <transition mode="out-in" @before-enter="beforeenter" @enter="enter"  @after-enter="afterenter"  @before-leave="beforeleave" @leave="leave" @after-leave="afterleave">
+                            <!-- <transition mode="out-in">
                                 <keep-alive :include="tagsList">
                                     <router-view></router-view>
                                 </keep-alive>
                             </transition> -->
-                            <keep-alive>
+                             <keep-alive :include="tagsList">
                                 <router-view></router-view>
                             </keep-alive>
                         </div>
@@ -46,17 +46,6 @@
             }
         },
         methods:{
-            beforeenter(){
-                //  console.log("beforeenter");
-                //  debugger;
-            },
-            enter(el,done){
-                
-                // console.log("enter");
-                // debugger;
-                // console.log("enter event");
-                done();
-            },
             afterenter(){
                 // debugger;
                 // if(this.mode == 'out-in'){
@@ -66,23 +55,6 @@
                 // debugger;
                 // let position = store.state.pagePosition;
                 // document.querySelector("#content-box .content").scrollTo(0,position);
-            },
-            beforeleave(){
-                // console.log("beforeleave");
-                 // debugger;
-            },
-            leave(el,done){
-                // debugger;
-                // console.log("leave");
-                done();
-                // console.log("leave event");
-            },
-            afterleave(){
-                // console.log("afterleave");
-                // if(this.mode == 'in-out'){
-                //     window.scrollTo(0,this.scrollTop);
-                // }
-                // debugger;
             }
         },
         components:{
@@ -121,13 +93,12 @@
     }
 
     #content-box .fixed-tags{
-        position: fixed;
         width:100%;
         height: 30px;
-        overflow: hidden;
+        // overflow: hidden;
         background: #fff;
-        padding-right: 120px;
-        z-index: 10;
+        // padding-right: 220px;
+        // z-index: 10;
         box-shadow: 0 5px 10px #ddd;
     }
 </style>

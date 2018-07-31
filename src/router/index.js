@@ -1,8 +1,14 @@
 // import Vue from 'vue';
 // import Router from 'vue-router';
 
+let home = resolve => require(['../components/common/Home.vue'], resolve);
+let dashboard =  resolve => require(['../components/page/Dashboard.vue'], resolve);
+let table = resolve => require(['../components/page/BaseTable.vue'], resolve);
+let tabs = resolve => require(['../components/page/Tabs.vue'], resolve);
+let form = resolve => require(['../components/page/BaseForm.vue'], resolve);
+let editor = resolve => require(['../components/page/VueEditor.vue'], resolve);
+let markdown = resolve => require(['../components/page/Markdown.vue'], resolve);
 Vue.use(VueRouter);
-
 export default new VueRouter({
     mode: 'history',
     routes: [
@@ -12,39 +18,39 @@ export default new VueRouter({
         },
         {
             path: '/',
-            component: resolve => require(['../components/common/Home.vue'], resolve),
+            component: home,
             meta: { title: '自述文件' },
             children:[
                 {
                     path: '/dashboard',
-                    component: resolve => require(['../components/page/Dashboard.vue'], resolve),
+                    component: dashboard,
                     meta: { title: '系统首页' }
                 },
                 {
                     path: '/table',
-                    component: resolve => require(['../components/page/BaseTable.vue'], resolve),
+                    component: table,
                     meta: { title: '基础表格' }
                 },
                 {
                     path: '/tabs',
-                    component: resolve => require(['../components/page/Tabs.vue'], resolve),
+                    component: tabs,
                     meta: { title: 'tab选项卡' }
                 },
                 {
                     path: '/form',
-                    component: resolve => require(['../components/page/BaseForm.vue'], resolve),
+                    component: form,
                     meta: { title: '基本表单' }
                 },
                 {
                     // 富文本编辑器组件
                     path: '/editor',
-                    component: resolve => require(['../components/page/VueEditor.vue'], resolve),
+                    component: editor,
                     meta: { title: '富文本编辑器' }
                 },
                 {
                     // markdown组件
                     path: '/markdown',
-                    component: resolve => require(['../components/page/Markdown.vue'], resolve),
+                    component: markdown,
                     meta: { title: 'markdown编辑器' }    
                 },
                 {
