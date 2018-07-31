@@ -1,4 +1,22 @@
-<template>
+<style scoped>
+    .handle-box {
+        margin-bottom: 20px;
+    }
+
+    .handle-select {
+        width: 120px;
+    }
+
+    .handle-input {
+        width: 300px;
+        display: inline-block;
+    }
+    .del-dialog-cnt{
+        font-size: 16px;
+        text-align: center
+    }
+</style>
+<template v-cloak>
     <div class="table">
         <div class="container">
             <div class="handle-box">
@@ -10,25 +28,25 @@
                 <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
             </div>
-            <el-table :data="data" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
-                <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column prop="date" label="日期" sortable width="150">
+            <el-table style="width: 100%" :data="data" border ref="multipleTable" @selection-change="handleSelectionChange">
+                <el-table-column type="selection"></el-table-column>
+                <el-table-column prop="date" label="日期" >
                 </el-table-column>
-                <el-table-column prop="name" label="姓名" width="120">
+                <el-table-column prop="name" label="姓名" >
                 </el-table-column>
                 <el-table-column prop="address" label="地址" :formatter="formatter">
                 </el-table-column>
-                <el-table-column label="操作" width="180">
-                    <template slot-scope="scope">
-                        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                <el-table-column label="操作">
+                    <template slot-scope="scope" >
+                        <el-button size="small"  @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                         <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
-            <div class="pagination">
+            <!-- <div class="pagination">
                 <el-pagination @current-change="handleCurrentChange" layout="prev, pager, next" :total="1000">
                 </el-pagination>
-            </div>
+            </div> -->
         </div>
 
         <!-- 编辑弹出框 -->
@@ -82,7 +100,48 @@
                     date: '',
                     address: ''
                 },
-                idx: -1
+                idx: -1,
+                list: [{
+                    "date": "1997-11-11",
+                    "name": "林丽",
+                    "address": "吉林省 辽源市 龙山区"
+                }, {
+                    "date": "1987-09-24",
+                    "name": "文敏",
+                    "address": "江西省 萍乡市 芦溪县"
+                }, {
+                    "date": "1996-08-08",
+                    "name": "杨秀兰",
+                    "address": "黑龙江省 黑河市 五大连池市"
+                }, {
+                    "date": "1978-06-18",
+                    "name": "魏强",
+                    "address": "广东省 韶关市 始兴县"
+                }, {
+                    "date": "1977-07-09",
+                    "name": "石秀兰",
+                    "address": "江苏省 宿迁市 宿豫区"
+                }, {
+                    "date": "1994-09-20",
+                    "name": "朱洋",
+                    "address": "海外 海外 -"
+                }, {
+                    "date": "1980-01-22",
+                    "name": "傅敏",
+                    "address": "海外 海外 -"
+                }, {
+                    "date": "1985-10-10",
+                    "name": "毛明",
+                    "address": "内蒙古自治区 包头市 九原区"
+                }, {
+                    "date": "1975-09-08",
+                    "name": "何静",
+                    "address": "西藏自治区 阿里地区 普兰县"
+                }, {
+                    "date": "1970-06-07",
+                    "name": "郭秀英",
+                    "address": "四川省 巴中市 恩阳区"
+                }]
             }
         },
         created() {
@@ -121,11 +180,14 @@
                 if (process.env.NODE_ENV === 'development') {
                     this.url = '/ms/table/list';
                 };
-                this.$axios.post(this.url, {
-                    page: this.cur_page
-                }).then((res) => {
-                    this.tableData = res.data.list;
-                })
+                setTimeout(()=>{
+                    this.tableData = this.list;
+                },100);
+                // this.$axios.post(this.url, {
+                //     page: this.cur_page
+                // }).then((res) => {
+                //     this.tableData = res.data.list;
+                // })
             },
             search() {
                 this.is_search = true;
@@ -180,21 +242,3 @@
 
 </script>
 
-<style scoped>
-    .handle-box {
-        margin-bottom: 20px;
-    }
-
-    .handle-select {
-        width: 120px;
-    }
-
-    .handle-input {
-        width: 300px;
-        display: inline-block;
-    }
-    .del-dialog-cnt{
-        font-size: 16px;
-        text-align: center
-    }
-</style>

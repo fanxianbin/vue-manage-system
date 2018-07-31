@@ -5,7 +5,11 @@ let mutations = {
     },
     setMainMenuItemCollapse(state){
        state.mainMenuItemCollapse = !state.mainMenuItemCollapse; 
+    },
+    setPagePosition(state,position){
+        state.pagePosition = position;
     }
+
 }
 
 export default mutations

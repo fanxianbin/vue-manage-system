@@ -2,28 +2,33 @@
     <div class="tags" v-if="showTags">
         <ul>
             <li class="tags-li" v-for="(item,index) in tagsList" :class="{'active': isActive(item.path)}" :key="index">
-                <router-link :to="item.path" class="tags-li-title">
+                <a @click="changeToTag(item.path)" class="tags-li-title">
                     {{item.title}}
-                </router-link>
+                </a>
                 <span class="tags-li-icon" @click="closeTags(index)"><i class="el-icon-close"></i></span>
             </li>
         </ul>
-        <div class="tags-close-box">
-            <el-dropdown @command="handleTags">
-                <el-button size="mini" type="primary">
-                    标签选项<i class="el-icon-arrow-down el-icon--right"></i>
-                </el-button>
-                <el-dropdown-menu size="small" slot="dropdown">
-                    <el-dropdown-item command="other">关闭其他</el-dropdown-item>
-                    <el-dropdown-item command="all">关闭所有</el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
+        <div class="tags-add-box">
+            <el-button size="mini" type="primary" @click="addTag">
+                <i class="el-icon-plus el-icon--right"></i>
+                <span>添加标签</span>
+            </el-button>
         </div>
     </div>
 </template>
 
 <script>
     import bus from './bus';
+    import store from '@/store/store';
+    let addTagValidator =(value) =>{
+        if(!value){
+            return "内容不能为空";
+        }
+        if(value.startsWith("http") && !value.startsWith(location.origin)){
+            return "跳转地址不能跨域";
+        }
+    }
+
     export default {
         data() {
             return {
@@ -44,6 +49,27 @@
                     this.$router.push('/');
                 }
             },
+            addTag(){
+                this.$prompt("请输入您想显示的页面地址",{
+                    inputValidator: addTagValidator
+                }).then(({value})=>{
+                    let path;
+                    let href = location.href;
+                    if(value.startsWith("/")){
+                        path = location.origin+value;
+                    }else if(href == location.origin){
+                        path=href+'/'+value
+                    }else if(href.endsWith("/")){
+                        path=href+value;
+                    }else{
+                        path = href.substring(0,href.lastIndexOf("/")+1)+value
+                    }
+                    console.log(this);
+                    this.$router.push({fullPath: "/table"});
+                }).catch(()=>{
+                    
+                });
+            },
             // 关闭全部标签
             closeAll(){
                 this.tagsList = [];
@@ -56,20 +82,38 @@
                 })
                 this.tagsList = curItem;
             },
+            changeToTag(toPath){
+                let currPath = this.$route.fullPath;
+                if(currPath === toPath){
+                    return;
+                }
+                for(let tag of this.tagsList){
+                    if(currPath == tag.path){
+                        tag.position = document.querySelector("#content-box .content").scrollTop;
+                    }
+                    if(toPath == tag.path){
+                        store.commit("setPagePosition",tag.position);
+                    }
+                }
+                this.$router.push(toPath);
+            },
             // 设置标签
             setTags(route){
-                const isExist = this.tagsList.some(item => {
-                    return item.path === route.fullPath;
-                })
-                if(!isExist){
-                    if(this.tagsList.length >= 8){
-                        this.tagsList.shift();
+                let tag = this.tagsList.some(item => {
+                    if(item.path === route.fullPath){
+                        return item;
                     }
+                });
+                if(!tag){
+                    // if(this.tagsList.length >= 8){
+                    //     this.tagsList.shift();
+                    // }
                     this.tagsList.push({
                         title: route.meta.title,
                         path: route.fullPath,
-                        name: route.matched[1].components.default.name
-                    })
+                        name: route.matched[1].components.default.name,
+                        position:0
+                    });
                 }
                 bus.$emit('tags', this.tagsList);
             },
@@ -96,15 +140,6 @@
 
 
 <style>
-    .tags {
-        position: relative;
-        height: 30px;
-        overflow: hidden;
-        background: #fff;
-        padding-right: 120px;
-        box-shadow: 0 5px 10px #ddd;
-    }
-
     .tags ul {
         box-sizing: border-box;
         width: 100%;
@@ -152,7 +187,7 @@
         color: #fff;
     }
 
-    .tags-close-box {
+    .tags-add-box {
         position: absolute;
         right: 0;
         top: 0;

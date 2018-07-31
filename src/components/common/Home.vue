@@ -4,21 +4,24 @@
             <el-header style="height:50px;">
                 <v-head></v-head>
             </el-header>
-            <el-container style="height:100%;position:relative">
-                <el-aside>
+            <el-container style="height:100%;position:relative;left:0;top:0">
+                <el-aside class="sidebar">
                     <v-sidebar></v-sidebar>
                 </el-aside>
-                <el-main>
-                    <div class="content-box" :class="{'content-collapse':collapse}">
-                        <v-tags></v-tags>
+                <el-main id="content-box" class="content-box" style="padding:0" :class="{'content-collapse':collapse}">
+                        <!-- 如果当前页面是导航页则显示导航标签，如果是详情页则显示为面包屑 -->
+                        <v-tags class="fixed-tags"></v-tags>
+                        <div style="height:25px"></div>
                         <div class="content">
-                            <transition name="move" mode="out-in">
+                            <!-- <transition mode="out-in" @before-enter="beforeenter" @enter="enter"  @after-enter="afterenter"  @before-leave="beforeleave" @leave="leave" @after-leave="afterleave">
                                 <keep-alive :include="tagsList">
                                     <router-view></router-view>
                                 </keep-alive>
-                            </transition>
+                            </transition> -->
+                            <keep-alive>
+                                <router-view></router-view>
+                            </keep-alive>
                         </div>
-                    </div>
                 </el-main>
             </el-container>
         </el-container>
@@ -42,13 +45,53 @@
                 return store.state.mainMenuItemCollapse;
             }
         },
+        methods:{
+            beforeenter(){
+                //  console.log("beforeenter");
+                //  debugger;
+            },
+            enter(el,done){
+                
+                // console.log("enter");
+                // debugger;
+                // console.log("enter event");
+                done();
+            },
+            afterenter(){
+                // debugger;
+                // if(this.mode == 'out-in'){
+                //     //window.scrollTo(0,this.scrollTop);
+                // }
+                // console.log("afterenter"+position);
+                // debugger;
+                // let position = store.state.pagePosition;
+                // document.querySelector("#content-box .content").scrollTo(0,position);
+            },
+            beforeleave(){
+                // console.log("beforeleave");
+                 // debugger;
+            },
+            leave(el,done){
+                // debugger;
+                // console.log("leave");
+                done();
+                // console.log("leave event");
+            },
+            afterleave(){
+                // console.log("afterleave");
+                // if(this.mode == 'in-out'){
+                //     window.scrollTo(0,this.scrollTop);
+                // }
+                // debugger;
+            }
+        },
         components:{
             vHead, vSidebar, vTags
         },
         created(){
-            // bus.$on('collapse', msg => {
-            //     this.collapse = msg;
-            // })
+            bus.$on('collapse', msg => {
+                this.collapse = msg;
+            })
             // 只有在标签页列表里的页面才使用keep-alive，即关闭标签之后就不保存到内存中了。
             bus.$on('tags', msg => {
                 let arr = [];
@@ -64,5 +107,27 @@
 <style lang="scss" scoped>
     .el-header{
         padding:0;
+    }
+    .sidebar{
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom:0;
+        overflow-y: scroll;
+    }
+    .sidebar::-webkit-scrollbar{
+        width: 0;
+    }
+
+    #content-box .fixed-tags{
+        position: fixed;
+        width:100%;
+        height: 30px;
+        overflow: hidden;
+        background: #fff;
+        padding-right: 120px;
+        z-index: 10;
+        box-shadow: 0 5px 10px #ddd;
     }
 </style>
