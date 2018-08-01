@@ -1,6 +1,6 @@
-// import Vue from 'vue';
-// import Router from 'vue-router';
-
+/**
+ * 导入模板
+ */
 let home = resolve => require(['../components/common/Home.vue'], resolve);
 let dashboard =  resolve => require(['../components/page/Dashboard.vue'], resolve);
 let table = resolve => require(['../components/page/BaseTable.vue'], resolve);
@@ -8,6 +8,7 @@ let tabs = resolve => require(['../components/page/Tabs.vue'], resolve);
 let form = resolve => require(['../components/page/BaseForm.vue'], resolve);
 let editor = resolve => require(['../components/page/VueEditor.vue'], resolve);
 let markdown = resolve => require(['../components/page/Markdown.vue'], resolve);
+
 Vue.use(VueRouter);
 export default new VueRouter({
     mode: 'history',
