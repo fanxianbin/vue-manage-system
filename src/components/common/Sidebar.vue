@@ -1,24 +1,24 @@
 <template>
-        <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157"
-            text-color="#bfcbd9" active-text-color="#20a0ff" router>
-            <template v-for="item in items">
-                <template v-if="item.subs">
-                    <el-submenu :index="item.index" :key="item.index">
-                        <template slot="title">
-                            <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
-                        </template>
-                        <el-menu-item v-for="(subItem,i) in item.subs" :key="i" :index="subItem.index">
-                            {{ subItem.title }}
-                        </el-menu-item>
-                    </el-submenu>
-                </template>
-                <template v-else>
-                    <el-menu-item :index="item.index" :key="item.index">
+    <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157"
+        text-color="#bfcbd9" active-text-color="#20a0ff" router>
+        <template v-for="item in items">
+            <template v-if="item.subs">
+                <el-submenu :index="item.index" :key="item.index">
+                    <template slot="title">
                         <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
+                    </template>
+                    <el-menu-item v-for="(subItem,i) in item.subs" :key="i" :index="subItem.index">
+                        {{ subItem.title }}
                     </el-menu-item>
-                </template>
+                </el-submenu>
             </template>
-        </el-menu>
+            <template v-else>
+                <el-menu-item :index="item.index" :key="item.index">
+                    <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
+                </el-menu-item>
+            </template>
+        </template>
+    </el-menu>
 </template>
 
 <script>
@@ -26,7 +26,7 @@
     import msgCenter from './mainMenu/msgCenter.js';
     import orderManager from './mainMenu/orderManager.js';
     import workplat from './mainMenu/workplat.js';
-    import bus from '../common/bus';
+    // import bus from '../common/bus';
     import store from '@/store/store'
     let mainMenu = [
         dealCenter,
@@ -37,6 +37,7 @@
     export default {
         data() {
             return {
+                // collapse:false
             }
         },
         computed:{
@@ -47,6 +48,7 @@
                 return store.state.mainMenuItemCollapse;
             },
             items(){
+                console.log(123123);
                 let index = store.state.mainMenuActiveIndex;
                 for(let menu of mainMenu){
                     if(menu.activeIndex == index){
@@ -54,13 +56,13 @@
                     }
                 }
             }
-        },
-        created(){
-            // 通过 Event Bus 进行组件间通信，来折叠侧边栏
-            bus.$on('collapse', msg => {
-                this.collapse = msg;
-            })
         }
+        // created(){
+        //     // 通过 Event Bus 进行组件间通信，来折叠侧边栏
+        //     bus.$on('collapse', msg => {
+        //         this.collapse = msg;
+        //     })
+        // }
     }
 </script>
 

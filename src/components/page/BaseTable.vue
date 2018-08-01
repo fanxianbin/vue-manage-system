@@ -182,7 +182,7 @@
                 };
                 setTimeout(()=>{
                     this.tableData = this.list;
-                },100);
+                },50);
                 // this.$axios.post(this.url, {
                 //     page: this.cur_page
                 // }).then((res) => {

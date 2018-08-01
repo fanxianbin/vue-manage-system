@@ -1,11 +1,11 @@
 <template>
     <div class="tags" v-if="showTags">
         <ul>
-            <li class="tags-li" v-for="(item,index) in tagsList" :class="{'active': isActive(item.path)}" :key="index">
-                <a @click="changeToTag(item.path)" class="tags-li-title">
+            <li class="tags-li" v-for="(item,index) in tagsList" @click="changeToTag(item.path)" :class="{'active': isActive(item.path)}" :key="index">
+                <a class="tags-li-title">
                     {{item.title}}
                 </a>
-                <span class="tags-li-icon" @click="closeTags(index)"><i class="el-icon-close"></i></span>
+                <span class="tags-li-icon" @click.stop="closeTags(index)"><i class="el-icon-close"></i></span>
             </li>
         </ul>
         <div class="tags-add-box">
@@ -138,8 +138,7 @@
 
 </script>
 
-
-<style>
+<style lang="scss" scoped>
     .tags ul {
         box-sizing: border-box;
         width: 100%;
@@ -148,21 +147,21 @@
 
     .tags-li {
         float: left;
-        margin: 3px 5px 2px 3px;
+        margin:2px 5px 2px 2px;
         border-radius: 3px;
-        font-size: 12px;
+        font-size: 13px;
         overflow: hidden;
         cursor: pointer;
-        height: 23px;
-        line-height: 23px;
-        border: 1px solid #e9eaec;
+        height: 30px;
+        line-height: 32px;
+        border: 1.2px solid #ccc;
         background: #fff;
         padding: 0 5px 0 12px;
         vertical-align: middle;
         color: #666;
-        -webkit-transition: all .3s ease-in;
-        -moz-transition: all .3s ease-in;
-        transition: all .3s ease-in;
+        // -webkit-transition: all .1s ease-in;
+        // -moz-transition: all .1s ease-in;
+        // transition: all .1s ease-in;
     }
 
     .tags-li:not(.active):hover {
@@ -171,6 +170,8 @@
 
     .tags-li.active {
         color: #fff;
+        border: 1px solid #409EFF;
+        background-color: #409EFF;
     }
 
     .tags-li-title {

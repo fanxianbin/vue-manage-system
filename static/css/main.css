@@ -38,15 +38,15 @@ body{
 .content{
     width: 100%;
     padding: 20px;
-    padding-bottom: 30px;
+    padding-bottom: 50px;
     box-sizing: border-box;
     height: 100%;
     overflow-y: auto;
 }
-
+/* 
 [v-cloak] {
     display: none !important;
-}
+} */
 
 .content-collapse {
     left: 65px;

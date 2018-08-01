@@ -13,14 +13,11 @@
                         <v-tags class="fixed-tags"></v-tags>
                         <!-- <div style="height:25px;width:100%;"></div> -->
                         <div class="content">
-                            <!-- <transition mode="out-in">
+                            <transition :css="true" mode="out-in" @enter="enter" @before-enter="beforeenter" @after-enter="afterenter">
                                 <keep-alive :include="tagsList">
                                     <router-view></router-view>
                                 </keep-alive>
-                            </transition> -->
-                             <keep-alive :include="tagsList">
-                                <router-view></router-view>
-                            </keep-alive>
+                            </transition>
                         </div>
                 </el-main>
             </el-container>
@@ -46,15 +43,14 @@
             }
         },
         methods:{
+            beforeenter(){
+            },
+            enter(el,done){
+                let position = store.state.pagePosition;
+                document.querySelector("#content-box .content").scrollTo(0,position);
+                done();
+            },
             afterenter(){
-                // debugger;
-                // if(this.mode == 'out-in'){
-                //     //window.scrollTo(0,this.scrollTop);
-                // }
-                // console.log("afterenter"+position);
-                // debugger;
-                // let position = store.state.pagePosition;
-                // document.querySelector("#content-box .content").scrollTo(0,position);
             }
         },
         components:{
@@ -94,11 +90,12 @@
 
     #content-box .fixed-tags{
         width:100%;
-        height: 30px;
+        height: 36px;
         // overflow: hidden;
         background: #fff;
         // padding-right: 220px;
         // z-index: 10;
         box-shadow: 0 5px 10px #ddd;
+        border-bottom: 1.5px solid #ccc;
     }
 </style>
