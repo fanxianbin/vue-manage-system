@@ -41,7 +41,9 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         localStorage.setItem('ms_username',this.ruleForm.username);
-                        this.$router.push('/');
+                        let redirect = this.$route.query.redirect;
+                        redirect=redirect?redirect:'/'
+                        location.href=redirect;
                     } else {
                         console.log('error submit!!');
                         return false;

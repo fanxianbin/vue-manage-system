@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <!-- 折叠按钮 -->
-        <div class="collapse-btn" @click="collapseChage">
+        <div class="collapse-btn" @click="collapseChange">
             <i class="el-icon-menu"></i>
         </div>
         <div class="logo">后台管理系统</div>
@@ -74,11 +74,7 @@
             username(){
                 let username = localStorage.getItem('ms_username');
                 return username ? username : this.name;
-            },
-            // collapse(){
-            //     console.log(store.state.mainMenuItemCollapse);
-            //     return store.state.mainMenuItemCollapse;
-            // }
+            }
         },
         methods:{
             //主菜单切换
@@ -94,9 +90,7 @@
                 }
             },
             // 侧边栏折叠
-            collapseChage(){
-                // this.collapse = !this.collapse;
-                // bus.$emit('collapse', this.collapse);
+            collapseChange(){
                 store.commit("setMainMenuItemCollapse");
             },
             // 全屏事件
@@ -125,11 +119,6 @@
                     }
                 }
                 this.fullscreen = !this.fullscreen;
-            }
-        },
-        mounted(){
-            if(document.body.clientWidth < 1500){
-                this.collapseChage();
             }
         }
     }
@@ -177,7 +166,7 @@
     .btn-bell, .btn-fullscreen{
         position: relative;
         width: 30px;
-        height: 30px;
+        height: 22px;
         text-align: center;
         border-radius: 15px;
         cursor: pointer;

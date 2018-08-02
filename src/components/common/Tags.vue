@@ -1,6 +1,6 @@
 <template>
     <div class="tags" v-if="showTags">
-        <ul>
+        <ul class="tags-box">
             <li class="tags-li" v-for="(item,index) in tagsList" @click="changeToTag(item.path)" :class="{'active': isActive(item.path)}" :key="index">
                 <a class="tags-li-title">
                     {{item.title}}
@@ -8,7 +8,7 @@
                 <span class="tags-li-icon" @click.stop="closeTags(index)"><i class="el-icon-close"></i></span>
             </li>
         </ul>
-        <div class="tags-add-box">
+        <div class="tags-spanner">
             <el-button size="mini" type="primary" @click="addTag">
                 <i class="el-icon-plus el-icon--right"></i>
                 <span>添加标签</span>
@@ -32,7 +32,7 @@
     export default {
         data() {
             return {
-                tagsList: []
+                //tagsList: []
             }
         },
         methods: {
@@ -99,23 +99,7 @@
             },
             // 设置标签
             setTags(route){
-                let tag = this.tagsList.some(item => {
-                    if(item.path === route.fullPath){
-                        return item;
-                    }
-                });
-                if(!tag){
-                    // if(this.tagsList.length >= 8){
-                    //     this.tagsList.shift();
-                    // }
-                    this.tagsList.push({
-                        title: route.meta.title,
-                        path: route.fullPath,
-                        name: route.matched[1].components.default.name,
-                        position:0
-                    });
-                }
-                bus.$emit('tags', this.tagsList);
+            		store.commit("pushTagsList",route);
             },
             handleTags(command){
                 command === 'other' ? this.closeOther() : this.closeAll();
@@ -124,6 +108,9 @@
         computed: {
             showTags() {
                 return this.tagsList.length > 0;
+            },
+            tagsList(){
+            		return store.state.tagsList;
             }
         },
         watch:{
@@ -139,12 +126,16 @@
 </script>
 
 <style lang="scss" scoped>
-    .tags ul {
+    .tags .tags-box {
         box-sizing: border-box;
-        width: 100%;
+        width: 80%;
         height: 100%;
+        overflow-x :hidden;
     }
-
+		.tags .tags-spanner{
+				width: 20%;
+       // height: 100%;
+		}
     .tags-li {
         float: left;
         margin:2px 5px 2px 2px;

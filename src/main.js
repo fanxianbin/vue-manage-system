@@ -12,7 +12,8 @@ Vue.prototype.$axios = axios;
 router.beforeEach((to, from, next) => {
     const role = localStorage.getItem('ms_username');
     if(!role && to.path !== '/login'){
-        next('/login');
+    		router.replace({path:'/login',query:{redirect:to.fullPath}});
+        //next('/login');
     }else if(to.meta.permission){
         // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
         role === 'admin' ? next() : next('/403');

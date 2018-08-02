@@ -1,6 +1,6 @@
 <template>
     <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157"
-        text-color="#bfcbd9" active-text-color="#20a0ff" router>
+        text-color="#bfcbd9" active-text-color="#20a0ff" @select="handleSelect">
         <template v-for="item in items">
             <template v-if="item.subs">
                 <el-submenu :index="item.index" :key="item.index">
@@ -26,7 +26,6 @@
     import msgCenter from './mainMenu/msgCenter.js';
     import orderManager from './mainMenu/orderManager.js';
     import workplat from './mainMenu/workplat.js';
-    // import bus from '../common/bus';
     import store from '@/store/store'
     let mainMenu = [
         dealCenter,
@@ -37,7 +36,26 @@
     export default {
         data() {
             return {
-                // collapse:false
+                //tagsList:[]
+            }
+        },
+        methods:{
+            handleSelect(index,pathIndex) {
+                let toPath = pathIndex.join('');
+                let currPath = this.$route.fullPath;
+                if(currPath == toPath){
+                    return;
+                }
+                let tagsList = store.state.tagsList;
+                for(let tag of tagsList){
+                    if(currPath == tag.path){
+                        tag.position = document.querySelector("#content-box .content").scrollTop;
+                    }
+                    if(toPath == tag.path){
+                        store.commit("setPagePosition",tag.position);
+                    }
+                }
+                this.$router.push(toPath);
             }
         },
         computed:{
@@ -48,7 +66,6 @@
                 return store.state.mainMenuItemCollapse;
             },
             items(){
-                console.log(123123);
                 let index = store.state.mainMenuActiveIndex;
                 for(let menu of mainMenu){
                     if(menu.activeIndex == index){
@@ -57,12 +74,6 @@
                 }
             }
         }
-        // created(){
-        //     // 通过 Event Bus 进行组件间通信，来折叠侧边栏
-        //     bus.$on('collapse', msg => {
-        //         this.collapse = msg;
-        //     })
-        // }
     }
 </script>
 
