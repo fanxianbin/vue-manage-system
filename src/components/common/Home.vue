@@ -30,7 +30,7 @@
     import vSidebar from './Sidebar.vue';
     import vTags from './Tags.vue';
     import bus from './bus';
-    import store from '@/store/store'
+    import store from '@/store'
     export default {
         data(){
             return {
@@ -44,11 +44,10 @@
             tagsList(){
             	let tagsList = store.state.tagsList;
             	let arr = [];
-              for(let i = 0; i < tagsList.length; i ++){
-                  tagsList[i].name && arr.push(tagsList[i].name);
-              }
-              console.log(arr);
-            	return arr;
+                for(let i = 0; i < tagsList.length; i ++){
+                    tagsList[i].name && arr.push(tagsList[i].name);
+                }
+                return arr;
             }
         },
         methods:{

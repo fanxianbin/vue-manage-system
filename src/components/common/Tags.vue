@@ -19,7 +19,7 @@
 
 <script>
     import bus from './bus';
-    import store from '@/store/store';
+    import store from '@/store';
     let addTagValidator =(value) =>{
         if(!value){
             return "内容不能为空";

@@ -26,7 +26,7 @@
     import msgCenter from './mainMenu/msgCenter.js';
     import orderManager from './mainMenu/orderManager.js';
     import workplat from './mainMenu/workplat.js';
-    import store from '@/store/store'
+    import store from '@/store'
     let mainMenu = [
         dealCenter,
         msgCenter,

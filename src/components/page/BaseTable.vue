@@ -1,23 +1,5 @@
-<style scoped>
-    .handle-box {
-        margin-bottom: 20px;
-    }
-
-    .handle-select {
-        width: 120px;
-    }
-
-    .handle-input {
-        width: 300px;
-        display: inline-block;
-    }
-    .del-dialog-cnt{
-        font-size: 16px;
-        text-align: center
-    }
-</style>
-<template v-cloak>
-    <div class="table">
+<template>
+    <div class="table" v-if="reload">
         <div class="container">
             <div class="handle-box">
                 <el-button type="primary" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
@@ -81,6 +63,9 @@
 </template>
 
 <script>
+    import store from '@/store'
+    import reloadHelper from '@/util/reloadHelper.js'
+
     export default {
         name: 'basetable',
         data() {
@@ -166,6 +151,9 @@
                         }
                     }
                 })
+            },
+            reload(){
+                return reloadHelper.reload(this.$options.name);
             }
         },
         methods: {
@@ -176,7 +164,6 @@
             },
             // 获取 easy-mock 的模拟数据
             getData() {
-                // 开发环境使用 easy-mock 数据，正式环境使用 json 文件
                 if (process.env.NODE_ENV === 'development') {
                     this.url = '/ms/table/list';
                 };
@@ -241,4 +228,21 @@
     }
 
 </script>
+<style scoped>
+    .handle-box {
+        margin-bottom: 20px;
+    }
 
+    .handle-select {
+        width: 120px;
+    }
+
+    .handle-input {
+        width: 300px;
+        display: inline-block;
+    }
+    .del-dialog-cnt{
+        font-size: 16px;
+        text-align: center
+    }
+</style>

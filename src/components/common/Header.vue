@@ -60,7 +60,7 @@
 </template>
 <script>
     import bus from '../common/bus';
-    import store from '@/store/store'
+    import store from '@/store'
     export default {
         data() {
             return {

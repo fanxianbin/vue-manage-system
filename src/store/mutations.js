@@ -22,12 +22,11 @@ let mutations = {
 	        state.tagsList.push({
 	            title: route.meta.title,
 	            path: route.fullPath,
-	            name:route.fullPath,
-	            //name: route.matched[1].components.default.name,
-	            position:0
+	            name: route.matched[1].components.default.name,
+				position:0,
+				reload:false
 	        });
 	    }
-    
     }
     
     
