@@ -1,7 +1,7 @@
 <template>
     <div class="tags" v-if="showTags">
         <ul class="tags-box">
-            <li class="tags-li" v-for="(item,index) in tagsList" @click="changeToTag(item.path)" :class="{'active': isActive(item.path)}" :key="index">
+            <li class="tags-li" v-for="(item,index) in tagList" @click="changeToTag(item.path)" @dblclick="reloadCurrPage(item.name)" :class="{'active': isActive(item.path)}" :key="index">
                 <a class="tags-li-title">
                     {{item.title}}
                 </a>
@@ -9,7 +9,7 @@
             </li>
         </ul>
         <div class="tags-spanner">
-            <el-button size="mini" type="primary" @click="addTag">
+            <el-button size="mini" type="primary">
                 <i class="el-icon-plus el-icon--right"></i>
                 <span>添加标签</span>
             </el-button>
@@ -32,74 +32,54 @@
     export default {
         data() {
             return {
-                //tagsList: []
+                //tagList: []
             }
         },
         methods: {
+            reloadCurrPage(name){
+                
+            },
             isActive(path) {
                 return path === this.$route.fullPath;
             },
             // 关闭单个标签
             closeTags(index) {
-                const delItem = this.tagsList.splice(index, 1)[0];
-                const item = this.tagsList[index] ? this.tagsList[index] : this.tagsList[index - 1];
-                if (item) {
-                    delItem.path === this.$route.fullPath && this.$router.push(item.path);
+                let tagList = this.tagList;
+                //当前只剩最后一个标签且lastHoldig为true则为最后一个标签不能关闭
+                if(tagList.length == 1 && this.$route.meta.lastHoldig){
+                    return;   
+                }
+                //获取删除的元素
+                let delItem = tagList[index];
+                store.commit("removeTag",index);
+                let item = tagList[index] ? tagList[index] : tagList[index - 1];
+                if (item){
+                    if(this.$route.fullPath == delItem.path){
+                        this.$router.push(item.path);
+                    }
+                    //this.$route.fullPath && this.$router.push(item.path);
                 }else{
                     this.$router.push('/');
                 }
             },
-            addTag(){
-                this.$prompt("请输入您想显示的页面地址",{
-                    inputValidator: addTagValidator
-                }).then(({value})=>{
-                    let path;
-                    let href = location.href;
-                    if(value.startsWith("/")){
-                        path = location.origin+value;
-                    }else if(href == location.origin){
-                        path=href+'/'+value
-                    }else if(href.endsWith("/")){
-                        path=href+value;
-                    }else{
-                        path = href.substring(0,href.lastIndexOf("/")+1)+value
-                    }
-                    console.log(this);
-                    this.$router.push({fullPath: "/table"});
-                }).catch(()=>{
-                    
-                });
-            },
             // 关闭全部标签
             closeAll(){
-                this.tagsList = [];
+                this.tagList = [];
                 this.$router.push('/');
             },
             // 关闭其他标签
             closeOther(){
-                const curItem = this.tagsList.filter(item => {
+                const curItem = this.tagList.filter(item => {
                     return item.path === this.$route.fullPath;
                 })
-                this.tagsList = curItem;
+                this.tagList = curItem;
             },
             changeToTag(toPath){
                 let currPath = this.$route.fullPath;
                 if(currPath === toPath){
                     return;
                 }
-                for(let tag of this.tagsList){
-                    if(currPath == tag.path){
-                        tag.position = document.querySelector("#content-box .content").scrollTop;
-                    }
-                    if(toPath == tag.path){
-                        store.commit("setPagePosition",tag.position);
-                    }
-                }
                 this.$router.push(toPath);
-            },
-            // 设置标签
-            setTags(route){
-            		store.commit("pushTagsList",route);
             },
             handleTags(command){
                 command === 'other' ? this.closeOther() : this.closeAll();
@@ -107,20 +87,12 @@
         },
         computed: {
             showTags() {
-                return this.tagsList.length > 0;
+                return this.tagList.length > 0;
             },
-            tagsList(){
-            		return store.state.tagsList;
+            tagList(){
+                return store.state.tagList;
             }
         },
-        watch:{
-            $route(newValue, oldValue){
-                this.setTags(newValue);
-            }
-        },
-        created(){
-            this.setTags(this.$route);
-        }
     }
 
 </script>

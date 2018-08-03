@@ -3,17 +3,17 @@ export default {
     items: [
         {
             icon: 'el-icon-setting',
-            index: '/dashboard',
+            index: '/dashboard3',
             title: '系统首页'
         },
         {
             icon: 'el-icon-tickets',
-            index: '/table',
+            index: '/table3',
             title: '基础表格'
         },
         {
             icon: 'el-icon-message',
-            index: '/tabs',
+            index: '/tabs3',
             title: 'tab选项卡'
         }
     ]

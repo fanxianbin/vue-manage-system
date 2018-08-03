@@ -14,8 +14,8 @@
                         <!-- <div style="height:25px;width:100%;"></div> -->
                         <div class="content">
                             <transition :css="true" mode="out-in" @enter="enter" @before-enter="beforeenter" @after-enter="afterenter">
-                                <keep-alive :include="tagsList">
-                                    <router-view></router-view>
+                                <keep-alive :include="tagList">
+                                    <router-view v-if="reload"></router-view>
                                 </keep-alive>
                             </transition>
                         </div>
@@ -31,30 +31,39 @@
     import vTags from './Tags.vue';
     import bus from './bus';
     import store from '@/store'
+    import reloadHelper from '@/util/reloadHelper.js'
     export default {
         data(){
             return {
-                //tagsList: [],
+                reload:true
             }
         },
         computed:{
             collapse(){
                 return store.state.mainMenuItemCollapse;
             },
-            tagsList(){
-            	let tagsList = store.state.tagsList;
+            tagList(){
+            	let tagList = store.state.tagList;
             	let arr = [];
-                for(let i = 0; i < tagsList.length; i ++){
-                    tagsList[i].name && arr.push(tagsList[i].name);
+                for(let i = 0; i < tagList.length; i ++){
+                    tagList[i].name && arr.push(tagList[i].name);
                 }
                 return arr;
-            }
+            },
         },
         methods:{
+            getPosition(path){
+                for(let tag of store.state.tagList){
+                    if(tag.path == path){
+                        return tag.position;
+                    }
+                }
+                return 0;
+            },
             beforeenter(){
             },
             enter(el,done){
-                let position = store.state.pagePosition;
+                let position = this.getPosition(this.$route.fullPath);
                 document.querySelector("#content-box .content").scrollTo(0,position);
                 done();
             },
@@ -63,6 +72,14 @@
         },
         components:{
             vHead, vSidebar, vTags
+        },
+        watch:{
+            $route(to, from){
+                store.commit("pushTagList",to);
+            }
+        },
+        created(){
+            store.commit("pushTagList",this.$route);
         }
     }
 </script>

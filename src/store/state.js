@@ -3,6 +3,6 @@ let state={
     mainMenuActiveIndex:'deal-center',
     mainMenuItemCollapse:false,
     pagePosition:0,
-    tagsList:[],
+    tagList:[],
 }   
 export default state

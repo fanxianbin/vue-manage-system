@@ -3,12 +3,12 @@ export default {
     items: [
         {
             icon: 'el-icon-setting',
-            index: '/dashboard',
+            index: '/dashboard2',
             title: '系统首页'
         },
         {
             icon: 'el-icon-tickets',
-            index: '/table',
+            index: '/table2',
             title: '基础表格'
         }
     ]

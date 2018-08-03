@@ -9,27 +9,36 @@ let mutations = {
     setPagePosition(state,position){
         state.pagePosition = position;
     },
-    pushTagsList(state,route){
-    	let tag = state.tagsList.some(item => {
+    pushTagList(state,route){
+    	let isExist = state.tagList.some(item => {
 	        if(item.path === route.fullPath){
 	            return item;
 	        }
 	    });
-	    if(!tag){
-	        // if(this.tagsList.length >= 8){
-	        //     this.tagsList.shift();
+	    if(!isExist){
+	        // if(this.tagList.length >= 8){
+	        //     this.tagList.shift();
 	        // }
-	        state.tagsList.push({
+	        state.tagList.push({
 	            title: route.meta.title,
 	            path: route.fullPath,
 	            name: route.matched[1].components.default.name,
-				position:0,
-				reload:false
+				position:0
 	        });
 	    }
-    }
-    
-    
+    },
+    removeTag(state,index){
+        state.tagList.splice(index, 1)[0];
+	},
+	setTagPosition(state,param){
+		let path = param.path;
+		let position = param.position;
+		for(let tag of state.tagList){
+			if(tag.path == path){
+				tag.position = position;
+			}
+		}
+	}
 }
 
 export default mutations

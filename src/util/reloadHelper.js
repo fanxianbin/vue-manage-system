@@ -1,9 +1,8 @@
 import store from '@/store'
 let reload = (name)=>{
-    let tagsList = store.state.tagsList;
-    for(let tag of tagsList){
+    let tagList = store.state.tagList;
+    for(let tag of tagList){
         if(tag.name === name){
-            console.log(tag);
             return !tag.reload;
         }
     }

@@ -2,12 +2,12 @@
     <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157"
         text-color="#bfcbd9" active-text-color="#20a0ff" @select="handleSelect">
         <template v-for="item in items">
-            <template v-if="item.subs">
+            <template v-if="item.subItems">
                 <el-submenu :index="item.index" :key="item.index">
                     <template slot="title">
                         <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
                     </template>
-                    <el-menu-item v-for="(subItem,i) in item.subs" :key="i" :index="subItem.index">
+                    <el-menu-item v-for="(subItem,i) in item.subItems" :key="i" :index="subItem.index">
                         {{ subItem.title }}
                     </el-menu-item>
                 </el-submenu>
@@ -22,21 +22,12 @@
 </template>
 
 <script>
-    import dealCenter from './mainMenu/dealCenter.js';
-    import msgCenter from './mainMenu/msgCenter.js';
-    import orderManager from './mainMenu/orderManager.js';
-    import workplat from './mainMenu/workplat.js';
     import store from '@/store'
-    let mainMenu = [
-        dealCenter,
-        msgCenter,
-        orderManager,
-        workplat
-    ]
+    import mainMenu from './mainMenu'
+    
     export default {
         data() {
             return {
-                //tagsList:[]
             }
         },
         methods:{
@@ -45,15 +36,6 @@
                 let currPath = this.$route.fullPath;
                 if(currPath == toPath){
                     return;
-                }
-                let tagsList = store.state.tagsList;
-                for(let tag of tagsList){
-                    if(currPath == tag.path){
-                        tag.position = document.querySelector("#content-box .content").scrollTop;
-                    }
-                    if(toPath == tag.path){
-                        store.commit("setPagePosition",tag.position);
-                    }
                 }
                 this.$router.push(toPath);
             }
@@ -67,7 +49,7 @@
             },
             items(){
                 let index = store.state.mainMenuActiveIndex;
-                for(let menu of mainMenu){
+                for(let menu of mainMenu.mainMenu){
                     if(menu.activeIndex == index){
                         return menu.items;
                     }

@@ -20,7 +20,7 @@ export default {
             icon: 'el-icon-date',
             index: '',
             title: '表单相关',
-            subs: [
+            subItems: [
                 {
                     index: '/form',
                     title: '基本表单'
@@ -39,11 +39,11 @@ export default {
                 }
             ]
         },
-        {
-            icon: 'el-icon-star-on',
-            index: '/charts',
-            title: 'schart图表'
-        },
+        // {
+        //     icon: 'el-icon-star-on',
+        //     index: '/charts',
+        //     title: 'schart图表'
+        // },
         {
             icon: 'el-icon-rank',
             index: '/drag',

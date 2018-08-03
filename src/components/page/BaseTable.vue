@@ -1,5 +1,5 @@
 <template>
-    <div class="table" v-if="reload">
+    <div class="table">
         <div class="container">
             <div class="handle-box">
                 <el-button type="primary" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
@@ -64,8 +64,6 @@
 
 <script>
     import store from '@/store'
-    import reloadHelper from '@/util/reloadHelper.js'
-
     export default {
         name: 'basetable',
         data() {
@@ -151,9 +149,6 @@
                         }
                     }
                 })
-            },
-            reload(){
-                return reloadHelper.reload(this.$options.name);
             }
         },
         methods: {
