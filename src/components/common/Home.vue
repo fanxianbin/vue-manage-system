@@ -10,7 +10,7 @@
                 </el-aside>
                 <el-main id="content-box" class="content-box" style="padding:0;" :class="{'content-collapse':collapse}">
                         <!-- 如果当前页面是导航页则显示导航标签，如果是详情页则显示为面包屑 -->
-                        <v-tags class="fixed-tags"></v-tags>
+                        <v-tags class="tag-list"></v-tags>
                         <!-- <div style="height:25px;width:100%;"></div> -->
                         <div class="content">
                             <transition :css="true" mode="out-in" @enter="enter" @before-enter="beforeenter" @after-enter="afterenter">
@@ -29,9 +29,8 @@
     import vHead from './Header.vue';
     import vSidebar from './Sidebar.vue';
     import vTags from './Tags.vue';
-    import bus from './bus';
     import store from '@/store'
-    import reloadHelper from '@/util/reloadHelper.js'
+    import mainMenu from './mainMenu' 
     export default {
         data(){
             return {
@@ -63,8 +62,8 @@
             beforeenter(){
             },
             enter(el,done){
-                let position = this.getPosition(this.$route.fullPath);
-                document.querySelector("#content-box .content").scrollTo(0,position);
+                let position = this.getPosition(this.$route.path);
+                $("#content-box .content").scrollTop(position);
                 done();
             },
             afterenter(){
@@ -75,7 +74,9 @@
         },
         watch:{
             $route(to, from){
-                store.commit("pushTagList",to);
+                if(to.name == 'home' || mainMenu.isPathInMenu(to.path)){
+                    store.commit("pushTagList",to);
+                }
             }
         },
         created(){
@@ -100,7 +101,7 @@
         width: 0;
     }
 
-    #content-box .fixed-tags{
+    #content-box .tag-list{
         width:100%;
         height: 36px;
         // overflow: hidden;

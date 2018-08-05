@@ -4,7 +4,7 @@ export default {
         {
             icon: 'el-icon-setting',
             index: '/dashboard',
-            title: '系统首页'
+            title: '数据看板',
         },
         {
             icon: 'el-icon-tickets',
@@ -18,22 +18,26 @@ export default {
         },
         {
             icon: 'el-icon-date',
-            index: '',
+            index: '/test',
             title: '表单相关',
             subItems: [
                 {
+                    icon:'el-icon-tickets',
                     index: '/form',
                     title: '基本表单'
                 },
                 {
+                    icon:'el-icon-tickets',
                     index: '/editor',
                     title: '富文本编辑器'
                 },
                 {
+                    icon:'el-icon-tickets',
                     index: '/markdown',
                     title: 'markdown编辑器'
                 },
                 {
+                    icon:'el-icon-tickets',
                     index: '/upload',
                     title: '文件上传'
                 }

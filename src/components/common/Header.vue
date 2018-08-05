@@ -38,19 +38,17 @@
                     <span class="btn-bell-badge" v-if="message"></span>
                 </div>
                 <!-- 用户头像 -->
-                <div class="user-avator"><img src="static/img/img.jpg"></div>
+                <div class="user-avator"><img src="/static/img/img.jpg"></div>
                 <!-- 用户名下拉菜单 -->
-                <el-dropdown class="user-name" trigger="click" @command="handleCommand">
-                    <span class="el-dropdown-link">
+                <el-dropdown class="user-name" trigger="hover" @command="handleCommand" :show-timeout="0" >
+                    <span class="el-dropdown-link" style="font-size:16px;padding:10px 0">
                         {{username}} <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <a href="http://blog.gdfengshuo.com/about/" target="_blank">
-                            <el-dropdown-item>关于作者</el-dropdown-item>
+                        <a href="https://www.baidu.com" target="_blank">
+                            <el-dropdown-item>关于我们</el-dropdown-item>
                         </a>
-                        <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
-                            <el-dropdown-item>项目仓库</el-dropdown-item>
-                        </a>
+                        <el-dropdown-item divided  command="resetPwd">修改密码</el-dropdown-item>
                         <el-dropdown-item divided  command="loginout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -59,7 +57,6 @@
     </div>
 </template>
 <script>
-    import bus from '../common/bus';
     import store from '@/store'
     export default {
         data() {
@@ -145,7 +142,7 @@
     }
     .header-right{
         float: right;
-        padding-right: 50px;
+        padding-right: 20px;
     }
     .header-user-con{
         display: flex;

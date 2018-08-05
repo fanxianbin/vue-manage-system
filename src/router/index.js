@@ -3,6 +3,7 @@ import store from '@/store'
 /**
  * 导入模板
  */
+import index from '../components/page/Home.vue';
 let home = resolve => require(['../components/common/Home.vue'], resolve);
 let dashboard =  resolve => require(['../components/page/Dashboard.vue'], resolve);
 let table = resolve => require(['../components/page/BaseTable.vue'], resolve);
@@ -16,19 +17,26 @@ Vue.use(VueRouter);
 let router = new VueRouter({
     mode: 'history',
     routes: [
-        {
-            path: '/',
-            redirect: '/dashboard'
-        },
+        // {
+        //     path: '/',
+        //     component: index,
+        //     meta: { title: '首页',lastHoldig:true,showTag:true}
+        // },
         {
             path: '/',
             component: home,
             meta: { title: '外层包裹文件' },
             children:[
                 {
+                    path: '',
+                    name:'home',
+                    component: index,
+                    meta: { title: '首页',lastHoldig:true,showTag:true}
+                },
+                {
                     path: '/dashboard',
                     component: dashboard,
-                    meta: { title: '系统首页',lastHoldig:true,showTag:true}
+                    meta: { title: '数据看板',showTag:true}
                 },
                 {
                     path: '/table',
@@ -41,25 +49,25 @@ let router = new VueRouter({
                     meta: { title: 'tab选项卡',showTag:true}
                 },
                 {
-                    path: '/form',
+                    path: '/test/form',
                     component: form,
                     meta: { title: '基本表单',showTag:true}
                 },
                 {
                     // 富文本编辑器组件
-                    path: '/editor',
+                    path: '/test/editor',
                     component: editor,
                     meta: { title: '富文本编辑器',showTag:true}
                 },
                 {
                     // markdown组件
-                    path: '/markdown',
+                    path: '/test/markdown',
                     component: markdown,
                     meta: { title: 'markdown编辑器',showTag:true}    
                 },
                 {
                     // 图片上传组件
-                    path: '/upload',
+                    path: '/test/upload',
                     component: resolve => require(['../components/page/Upload.vue'], resolve),
                     meta: { title: '文件上传',showTag:true}   
                 },
@@ -103,13 +111,12 @@ let router = new VueRouter({
 });
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
-    // debugger;
     //公共路由修改页面之前，需要先保存页面相对位置
-    if(mainMenu.isPathInMenu(to.fullPath)){
+    if(mainMenu.isPathInMenu(from.path)){
         let content = document.querySelector("#content-box .content");
         if(content){
             let param = {};
-            param.path = from.fullPath;
+            param.path = from.path;
             param.position = content.scrollTop;
             store.commit("setTagPosition",param);
         }

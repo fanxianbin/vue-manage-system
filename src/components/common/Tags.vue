@@ -1,25 +1,31 @@
 <template>
-    <div class="tags" v-if="showTags">
-        <ul class="tags-box">
-            <li class="tags-li" v-for="(item,index) in tagList" @click="changeToTag(item.path)" @dblclick="reloadCurrPage(item.name)" :class="{'active': isActive(item.path)}" :key="index">
-                <a class="tags-li-title">
-                    {{item.title}}
-                </a>
-                <span class="tags-li-icon" @click.stop="closeTags(index)"><i class="el-icon-close"></i></span>
-            </li>
-        </ul>
-        <div class="tags-spanner">
-            <el-button size="mini" type="primary">
-                <i class="el-icon-plus el-icon--right"></i>
-                <span>添加标签</span>
-            </el-button>
+    <div id="main-tags" class="tags" v-if="showTags">
+        <div class="tags-tab">
+            <table class="tags-box">
+                <tr>
+                    <td class="tags-li" @contextmenu.stop="showContextmenu($event,index)" v-for="(item,index) in tagList" @click="changeToTag(item.path)" :class="{'active': isActive(item.path)}" :key="index">
+                        <a class="tags-li-title">{{item.title}}</a>
+                        <span class="tags-li-icon" @click.stop="closeTag(index)"><i class="el-icon-close"></i></span>
+                    </td>
+                </tr>
+            </table>
+            <!-- 滚动条显示/隐藏触发器 -->
+            <div class="tags-slip" v-show="showSlip">
+                <el-button size="mini" type="primary" @mousedown.native="slipLeft" @mouseup.native="slipLeftCancel">
+                    <i class="el-icon-caret-left"></i>
+                </el-button>
+                <el-button size="mini" type="primary" @mousedown.native="slipRight" @mouseup.native="slipRightCancel">
+                    <i class="el-icon-caret-right"></i>
+                </el-button>
+            </div>
         </div>
+        <contextmenu :contextmenuData="contextmenuData" @e-contextmenu-tags="closeHandler"></contextmenu>
     </div>
 </template>
 
 <script>
-    import bus from './bus';
     import store from '@/store';
+    import contextmenu from './Contextmenu.vue'
     let addTagValidator =(value) =>{
         if(!value){
             return "内容不能为空";
@@ -28,25 +34,97 @@
             return "跳转地址不能跨域";
         }
     }
-
+    let slipTimer = null;
     export default {
         data() {
             return {
-                //tagList: []
+                showSlip:false,
+                contextmenuData: {
+                    menuName: 'tags',
+                    attachData:null,
+                    axios: {
+                        x: null,
+                        y: null
+                    },
+                    paddingLeft: null,
+                    width:null,
+                    menulist: [{
+                        command: 'closeCurr',
+                        text: '关闭标签页'
+                    },
+                    {
+                        command: 'closeOther',
+                        text: '关闭其他标签页'
+                    },
+                    {
+                        command: 'closeLeft',
+                        text: '关闭左侧标签页'
+                    },
+                    {
+                        command: 'closeRight',
+                        text: '关闭右侧标签页'
+                    },
+                    {
+                        command: 'closeAll',
+                        text: '关闭所有标签页'
+                    }
+                    ]
+                }
             }
         },
+        components:{
+            contextmenu
+        },
         methods: {
-            reloadCurrPage(name){
-                
+            slipLeft(){
+                let mainTag = $("#main-tags");
+                let tagsTab = mainTag.find(".tags-tab");
+                let tagBox = mainTag.find(".tags-box")
+                //tab宽度恒定不变
+                let tagsTabWidth = tagsTab.width();
+                let tagBoxWidth = tagBox.width();
+                let left;
+                let leftWidth = tagBoxWidth-tagsTabWidth;
+                if(tagsTabWidth < tagBoxWidth){
+                    slipTimer = setInterval(()=>{
+                        left = parseFloat(tagBox.css("left").replace("px",''));
+                        tagBox.css("left",left-10>-leftWidth?left-10:-leftWidth);
+                    },20);
+                }
+            },
+            slipLeftCancel(){
+                if(slipTimer){
+                    clearInterval(slipTimer);
+                }
+            },
+            slipRight(){
+                let mainTag = $("#main-tags");
+                let tagsTab = mainTag.find(".tags-tab");
+                let tagBox = mainTag.find(".tags-box")
+                //tab宽度恒定不变
+                let tagsTabWidth = tagsTab.width();
+                let tagBoxWidth = tagBox.width();
+                let left;
+                if(tagsTabWidth < tagBoxWidth){
+                    slipTimer = setInterval(()=>{
+                        left = parseFloat(tagBox.css("left").replace("px",''));
+                        tagBox.css("left",left+10<0?left+10:0);
+                    },20);
+                }
+            },
+            slipRightCancel(){
+                if(slipTimer){
+                    clearInterval(slipTimer);
+                }
             },
             isActive(path) {
-                return path === this.$route.fullPath;
+                return path === this.$route.path;
             },
             // 关闭单个标签
-            closeTags(index) {
+            closeTag(index) {
                 let tagList = this.tagList;
                 //当前只剩最后一个标签且lastHoldig为true则为最后一个标签不能关闭
-                if(tagList.length == 1 && this.$route.meta.lastHoldig){
+                if(tagList.length == 1 && this.$route.name == 'home'){
                     return;   
                 }
                 //获取删除的元素
@@ -54,28 +132,15 @@
                 store.commit("removeTag",index);
                 let item = tagList[index] ? tagList[index] : tagList[index - 1];
                 if (item){
-                    if(this.$route.fullPath == delItem.path){
+                    if(this.$route.path == delItem.path){
                         this.$router.push(item.path);
                     }
-                    //this.$route.fullPath && this.$router.push(item.path);
                 }else{
                     this.$router.push('/');
                 }
             },
-            // 关闭全部标签
-            closeAll(){
-                this.tagList = [];
-                this.$router.push('/');
-            },
-            // 关闭其他标签
-            closeOther(){
-                const curItem = this.tagList.filter(item => {
-                    return item.path === this.$route.fullPath;
-                })
-                this.tagList = curItem;
-            },
             changeToTag(toPath){
-                let currPath = this.$route.fullPath;
+                let currPath = this.$route.path;
                 if(currPath === toPath){
                     return;
                 }
@@ -83,6 +148,120 @@
             },
             handleTags(command){
                 command === 'other' ? this.closeOther() : this.closeAll();
+            },
+            showContextmenu(event,index){
+                event.preventDefault();
+                let x = event.clientX
+                let y = event.clientY
+                this.contextmenuData.attachData={index};
+                this.contextmenuData.axios = {
+                    x, y
+                }
+            },
+            // 关闭其他标签
+            closeOther(index){
+                if(this.tagList.length > 1){
+                    let item = this.tagList[index];
+                    if(item.path != this.$route.path){
+                        this.$router.push(item.path);
+                    }
+                    store.commit("resetTagList",[item]);
+                }
+            },
+            closeLeft(index){
+                let tagList = this.tagList;
+                if(tagList.length == 1){
+                    return;
+                }
+                let currIndex = this.getCurrIndexOfTags;
+                if(currIndex < index){
+                    let nextPath = this.tagList[index].path;
+                    //需要
+                    store.commit("removeTagBefore",index);
+                    this.$router.push(nextPath);
+                }else{
+                    store.commit("removeTagBefore",index);
+                }
+            },
+            closeRight(index){
+                let tagList = this.tagList;
+                if(tagList.length == 1){
+                    return;
+                }
+                let currIndex = this.getCurrIndexOfTags;
+                if(currIndex > index){
+                    let nextPath = this.tagList[index].path;
+                    //需要
+                    store.commit("removeTagAfter",index);
+                    this.$router.push(nextPath);
+                }else{
+                    store.commit("removeTagAfter",index);
+                }
+            },
+            closeAll(index){
+                if(this.$route.name == "home"){
+                    this.closeOther(index);
+                }else{
+                    store.commit("resetTagList",[]);
+                    this.$router.push({name:'home'});
+                }
+            },
+            closeHandler(data){
+                let command = data.command;
+                let attachData = data.attachData;
+                if(command == 'closeCurr'){
+                    this.closeTag(attachData.index);
+                }else if(command == 'closeOther'){
+                    this.closeOther(attachData.index);
+                }else if(command == 'closeLeft'){
+                    this.closeLeft(attachData.index);
+                }else if(command == 'closeRight'){
+                    this.closeRight(attachData.index);
+                }else{
+                    this.closeAll(attachData.index);
+                }
+            },
+            relocate(){
+                let mainTag = $("#main-tags");
+                let tagBox = mainTag.find(".tags-box");
+                let tagsTab = mainTag.find(".tags-tab");
+                let tagsTabWidth = tagsTab.width();
+                let tagBoxWidth = tagBox.width();
+                //定位，滚动到当前选中的元素处，让目标元素在可视区域内
+                let viewLeft = tagsTab.offset().left+2;
+                let viewRight = viewLeft+tagsTab.width();
+                let index=0;
+                for(let tag of this.tagList){
+                    if(this.$route.path == tag.path){
+                        break;
+                    }
+                    index++;
+                }
+                let currTag = tagBox.find("td:eq("+index+")");
+                let currLeft = currTag.offset().left;
+                if(currLeft < viewLeft){
+                    let left = parseFloat(tagBox.css("left").replace("px",''));
+                    tagBox.css("left",left+(viewLeft - currLeft));
+                    return;
+                }
+                if(currLeft+ currTag.outerWidth()> viewRight){
+                    let left = parseFloat(tagBox.css("left").replace("px",''));
+                    tagBox.css("left",left-(currLeft+ currTag.outerWidth(true)+4-viewRight));
+                    return;
+                }
+            },
+            reCalSlip(){
+                let mainTag = $("#main-tags");
+                let tagBox = mainTag.find(".tags-box");
+                let tagsTab = mainTag.find(".tags-tab");
+                let tagsTabWidth = tagsTab.width();
+                let tagBoxWidth = tagBox.width();
+                this.showSlip = tagsTabWidth < tagBoxWidth;
+                if(this.showSlip){
+                    this.relocate();
+                }else{
+                    tagBox.css("left",0);
+                }
             }
         },
         computed: {
@@ -91,40 +270,80 @@
             },
             tagList(){
                 return store.state.tagList;
+            },
+            getCurrIndexOfTags(){
+                let i = 0;
+                for(let tag of this.tagList){
+                    if(tag.path == this.$route.path){
+                        return i;
+                    }
+                    i++;
+                }
+            },
+            isCollapse(){
+                return store.state.mainMenuItemCollapse;
             }
         },
+        watch:{
+            tagList(){
+                this.$nextTick(()=>{
+                    this.reCalSlip();
+                });
+            },
+            $route(){
+                this.$nextTick(()=>{
+                    this.relocate();
+                });
+            },
+            isCollapse(){
+                this.$nextTick(()=>{
+                   let timer = setTimeout(()=>{
+                       clearTimeout(timer);
+                       this.reCalSlip();
+                   },310);
+                });
+            }
+        }
     }
 
 </script>
 
 <style lang="scss" scoped>
-    .tags .tags-box {
-        box-sizing: border-box;
-        width: 80%;
-        height: 100%;
-        overflow-x :hidden;
+    .tags{
+        position: relative;
     }
-		.tags .tags-spanner{
-				width: 20%;
-       // height: 100%;
-		}
-    .tags-li {
-        float: left;
-        margin:2px 5px 2px 2px;
-        border-radius: 3px;
-        font-size: 13px;
+    .tags-tab{
+        position: relative;
+        overflow: hidden;
+        height: 36px;
+        padding-right:80px;
+    }
+    .tags-tab .tags-box {
+        background: #fff;
+        position: relative;
+        left: 0;
+        top:0;
+        box-sizing: border-box;
+        height: 100%;
+        overflow : hidden;
+        white-space: nowrap;
+    }
+    .tags-tab .tags-li {
+        position: relative;
+        text-align: left;
+        vertical-align: middle;
+        white-space: nowrap;
+        padding: 0 18px 0 7px;
+        width: 50px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 12.5px;
         overflow: hidden;
         cursor: pointer;
-        height: 30px;
-        line-height: 32px;
-        border: 1.2px solid #ccc;
+        border: 1px solid #ccc;
+        border-radius: 3px;
         background: #fff;
-        padding: 0 5px 0 12px;
-        vertical-align: middle;
         color: #666;
-        // -webkit-transition: all .1s ease-in;
-        // -moz-transition: all .1s ease-in;
-        // transition: all .1s ease-in;
     }
 
     .tags-li:not(.active):hover {
@@ -135,8 +354,11 @@
         color: #fff;
         border: 1px solid #409EFF;
         background-color: #409EFF;
-    }
 
+        .tags-li-title {
+            color: #fff;
+        }
+    }
     .tags-li-title {
         float: left;
         max-width: 80px;
@@ -146,23 +368,21 @@
         margin-right: 5px;
         color: #666;
     }
-
-    .tags-li.active .tags-li-title {
-        color: #fff;
-    }
-
-    .tags-add-box {
+    .tags-tab .tags-slip{
         position: absolute;
-        right: 0;
-        top: 0;
-        box-sizing: border-box;
-        padding-top: 1px;
-        text-align: center;
-        width: 110px;
-        height: 30px;
-        background: #fff;
-        box-shadow: -3px 0 15px 3px rgba(0, 0, 0, .1);
-        z-index: 10;
-    }
+        top:0;
+        right:0;
+        padding:0 2px;
+        background-color: #fff; 
+        height: 36px;
+        line-height: 36px;
+        width:76px;
+        .el-button {
+            padding:7px 9px;
+        }
 
+        .el-button+.el-button {
+            margin-left: 6px;
+        }
+    }
 </style>

@@ -27,15 +27,16 @@ body{
     left: 200px;
     right: 0;
     top: 0;
-    /* bottom: 0; */
     -webkit-transition: left .3s ease-in-out;
     transition: left .3s ease-in-out;
-    /* padding: 60px; */
     height: 100%;
     overflow-y: hidden;
 }
 
 .content{
+    position: relative;
+    left:0;
+    top:0;
     width: 100%;
     padding: 20px;
     padding-bottom: 50px;

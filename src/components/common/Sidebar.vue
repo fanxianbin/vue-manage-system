@@ -1,14 +1,16 @@
 <template>
-    <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157"
-        text-color="#bfcbd9" active-text-color="#20a0ff" @select="handleSelect">
+    <el-menu class="sidebar-el-menu" :collapse="collapse" background-color="#324157"
+        text-color="#bfcbd9" active-text-color="#20a0ff" router>
         <template v-for="item in items">
             <template v-if="item.subItems">
-                <el-submenu :index="item.index" :key="item.index">
+                <el-submenu :index="item.index" :key="item.index" :show-timeout="1">
                     <template slot="title">
-                        <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
+                        <i :class="item.icon"></i>
+                        <span>{{ item.title }}</span>
                     </template>
-                    <el-menu-item v-for="(subItem,i) in item.subItems" :key="i" :index="subItem.index">
-                        {{ subItem.title }}
+                    <el-menu-item v-for="subItem in item.subItems" :key="subItem.index" :index="item.index+subItem.index">
+                         <i :class="subItem.icon"></i>
+                        <span>{{ subItem.title }}</span>
                     </el-menu-item>
                 </el-submenu>
             </template>
@@ -31,19 +33,8 @@
             }
         },
         methods:{
-            handleSelect(index,pathIndex) {
-                let toPath = pathIndex.join('');
-                let currPath = this.$route.fullPath;
-                if(currPath == toPath){
-                    return;
-                }
-                this.$router.push(toPath);
-            }
         },
         computed:{
-            onRoutes(){
-                return this.$route.path.replace('/','');
-            },
             collapse(){
                 return store.state.mainMenuItemCollapse;
             },
