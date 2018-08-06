@@ -40,6 +40,7 @@
             },
             items(){
                 let index = store.state.mainMenuActiveIndex;
+                console.log(index);
                 for(let menu of mainMenu.mainMenu){
                     if(menu.activeIndex == index){
                         return menu.items;

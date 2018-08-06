@@ -11,10 +11,10 @@
             </table>
             <!-- 滚动条显示/隐藏触发器 -->
             <div class="tags-slip" v-show="showSlip">
-                <el-button size="mini" type="primary" @mousedown.native="slipLeft" @mouseup.native="slipLeftCancel">
+                <el-button size="mini" type="primary" @mousedown.native="slipRight" @mouseup.native="slipRightCancel">
                     <i class="el-icon-caret-left"></i>
                 </el-button>
-                <el-button size="mini" type="primary" @mousedown.native="slipRight" @mouseup.native="slipRightCancel">
+                <el-button size="mini" type="primary" @mousedown.native="slipLeft" @mouseup.native="slipLeftCancel">
                     <i class="el-icon-caret-right"></i>
                 </el-button>
             </div>

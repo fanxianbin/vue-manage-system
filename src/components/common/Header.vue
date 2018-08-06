@@ -58,25 +58,50 @@
 </template>
 <script>
     import store from '@/store'
+    import mainMenu from './mainMenu'
     export default {
         data() {
             return {
                 fullscreen: false,
                 name: 'linxin',
                 message: 2,
-                activeIndex:'deal-center'
             }
         },
         computed:{
             username(){
                 let username = localStorage.getItem('ms_username');
                 return username ? username : this.name;
+            },
+            activeIndex(){
+                let menus = mainMenu.mainMenu;
+                if(this.$route.name == 'home'){
+                     store.commit("setMainMenuActiveIndex",menus[0].activeIndex);
+                    return menus[0].activeIndex;
+                }
+                // return null;
+                for(let menu of menus){
+                    let items = menu.items;
+                    for(let item of items){
+                        if(item.subItems){
+                            for(let sub of item.subItems){
+                                if(item.index+sub.index == this.$route.path){
+                                    store.commit("setMainMenuActiveIndex",menu.activeIndex);
+                                    return menu.activeIndex;
+                                }
+                            }
+                        }else{
+                            if(item.index == this.$route.path){
+                                store.commit("setMainMenuActiveIndex",menu.activeIndex);
+                                return menu.activeIndex;
+                            }
+                        }
+                    }
+                }
             }
         },
         methods:{
             //主菜单切换
             handleSelect(index){
-                this.activeIndex = index;
                 store.commit("setMainMenuActiveIndex",index);
             },
             // 用户名下拉菜单选择事件

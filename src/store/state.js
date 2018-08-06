@@ -1,6 +1,6 @@
 let state={
     projectName: 'jifen',
-    mainMenuActiveIndex:'deal-center',
+    mainMenuActiveIndex:null,
     mainMenuItemCollapse:false,
     pagePosition:0,
     tagList:[],
