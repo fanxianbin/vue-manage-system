@@ -227,6 +227,9 @@
                 let tagsTab = mainTag.find(".tags-tab");
                 let tagsTabWidth = tagsTab.width();
                 let tagBoxWidth = tagBox.width();
+                if(tagBoxWidth < tagsTabWidth){
+                    return;
+                }
                 //定位，滚动到当前选中的元素处，让目标元素在可视区域内
                 let viewLeft = tagsTab.offset().left+2;
                 let viewRight = viewLeft+tagsTab.width();
@@ -247,6 +250,14 @@
                 if(currLeft+ currTag.outerWidth()> viewRight){
                     let left = parseFloat(tagBox.css("left").replace("px",''));
                     tagBox.css("left",left-(currLeft+ currTag.outerWidth(true)+4-viewRight));
+                    return;
+                }
+                //当前激活元素在可视区域，判断最右侧元素是否存在空缺
+                let lastTag = tagBox.find("td:last");
+                // debugger;
+                if(lastTag.offset().left+lastTag.outerWidth(true)+2 <= viewLeft+tagsTabWidth){
+                    let left = parseFloat(tagBox.css("left").replace("px",''));
+                    tagBox.css("left",left+((viewLeft+tagsTabWidth)-(lastTag.offset().left+lastTag.outerWidth(true)+4)));
                     return;
                 }
             },

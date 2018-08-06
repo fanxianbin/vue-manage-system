@@ -126,7 +126,6 @@
                     store.commit("setMainMenuActiveIndex",menus[0].activeIndex);
                     return menus[0].activeIndex;
                 }
-                // return null;
                 for(let menu of menus){
                     let items = menu.items;
                     for(let item of items){
