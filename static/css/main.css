@@ -19,9 +19,6 @@ body {
 a {
     text-decoration: none
 }
-body{
-    /* background: #f0f0f0; */
-}
 .content-box {
     position: absolute;
     left: 200px;

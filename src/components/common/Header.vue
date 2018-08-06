@@ -7,7 +7,7 @@
         <div class="logo">后台管理系统</div>
         <div class="main-menu">
             <el-menu
-            :default-active="activeIndex"
+            :default-active="defaultIndex"
             class="el-menu-demo"
             mode="horizontal"
             @select="handleSelect"
@@ -62,6 +62,7 @@
     export default {
         data() {
             return {
+                // defaultIndex:null,
                 fullscreen: false,
                 name: 'linxin',
                 message: 2,
@@ -72,31 +73,8 @@
                 let username = localStorage.getItem('ms_username');
                 return username ? username : this.name;
             },
-            activeIndex(){
-                let menus = mainMenu.mainMenu;
-                if(this.$route.name == 'home'){
-                     store.commit("setMainMenuActiveIndex",menus[0].activeIndex);
-                    return menus[0].activeIndex;
-                }
-                // return null;
-                for(let menu of menus){
-                    let items = menu.items;
-                    for(let item of items){
-                        if(item.subItems){
-                            for(let sub of item.subItems){
-                                if(item.index+sub.index == this.$route.path){
-                                    store.commit("setMainMenuActiveIndex",menu.activeIndex);
-                                    return menu.activeIndex;
-                                }
-                            }
-                        }else{
-                            if(item.index == this.$route.path){
-                                store.commit("setMainMenuActiveIndex",menu.activeIndex);
-                                return menu.activeIndex;
-                            }
-                        }
-                    }
-                }
+            defaultIndex(){
+                return store.state.mainMenuActiveIndex;
             }
         },
         methods:{
@@ -141,7 +119,36 @@
                     }
                 }
                 this.fullscreen = !this.fullscreen;
+            },
+            initDefaultIndex(){
+                let menus = mainMenu.mainMenu;
+                if(this.$route.name == 'home'){
+                    store.commit("setMainMenuActiveIndex",menus[0].activeIndex);
+                    return menus[0].activeIndex;
+                }
+                // return null;
+                for(let menu of menus){
+                    let items = menu.items;
+                    for(let item of items){
+                        if(item.subItems){
+                            for(let sub of item.subItems){
+                                if(item.index+sub.index == this.$route.path){
+                                    store.commit("setMainMenuActiveIndex",menu.activeIndex);
+                                    return menu.activeIndex;
+                                }
+                            }
+                        }else{
+                            if(item.index == this.$route.path){
+                                store.commit("setMainMenuActiveIndex",menu.activeIndex);
+                                return menu.activeIndex;
+                            }
+                        }
+                    }
+                }
             }
+        },
+        created(){
+            this.initDefaultIndex();
         }
     }
 </script>
