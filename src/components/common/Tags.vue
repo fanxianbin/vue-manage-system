@@ -345,7 +345,7 @@
         vertical-align: middle;
         white-space: nowrap;
         padding: 0 18px 0 7px;
-        width: 50px;
+        width: 33px;
         height: 30px;
         line-height: 30px;
         font-size: 12.5px;

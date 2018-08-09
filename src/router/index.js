@@ -14,14 +14,10 @@ let markdown = resolve => require(['../components/page/Markdown.vue'], resolve);
 
 Vue.use(VueRouter);
 
+//先查询后台得到当前用户的允许访问的链接地址，然后动态生成routes
 let router = new VueRouter({
     mode: 'history',
     routes: [
-        // {
-        //     path: '/',
-        //     component: index,
-        //     meta: { title: '首页',lastHoldig:true,showTag:true}
-        // },
         {
             path: '/',
             component: home,
