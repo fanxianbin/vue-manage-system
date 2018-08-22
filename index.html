@@ -6,12 +6,22 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
     <meta name="keywords" content="vue, vue-manage-system, manage-system, 后台管理系统, element" />
     <meta name="description" content="基于Vue2 + Element UI 的后台管理系统解决方案" />
+    <link rel="stylesheet" type="text/css" href="/static/css/theme-chalk/element-ui-2.4.6.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css"/>
     <script type="text/javascript" src="/static/js/jquery-2.2.4.min.js"></script>
     <script type="text/javascript" src="/static/js/vue.js"></script>
     <script type="text/javascript" src="/static/js/vue-router.js"></script>
-    <script type="text/javascript" src="/static/js/element-ui.js"></script>
+    <script type="text/javascript" src="/static/js/element-ui-2.4.6.js"></script>
+    <script type="text/javascript" src="/static/js/privilege-1.0.0.js"></script>
+    <script type="text/javascript" src="/static/js/jsencrypt.min.js"></script>
+    <script type="text/javascript">
+        let privilegeMap = {};
+        privilegeMap.queryEmp = "queryEmp";
+        privilegeMap.exportEmp = "exportEmp";
+        window.privilegeMap = privilegeMap;
+    </script>
 </head>
-    <body>
+    <body style="padding-top:55px;">
         <div id="app"></div>
     </body>
 </html>

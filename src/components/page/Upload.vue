@@ -44,7 +44,7 @@
         name: 'upload',
         data: function(){
             return {
-                defaultSrc: './static/img/img.jpg',
+                defaultSrc: '/static/img/img.jpg',
                 fileList: [],
                 imgSrc: '',
                 cropImg: '',
@@ -91,7 +91,7 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .content-title{
         font-weight: 400;
         line-height: 50px;

@@ -1,14 +1,13 @@
 <template>
     <div class="header">
         <!-- 折叠按钮 -->
-        <div class="collapse-btn" @click="collapseChange">
+        <div class="collapse-btn" @click="toIndex">
             <i class="el-icon-menu"></i>
         </div>
         <div class="logo">后台管理系统</div>
         <div class="main-menu">
             <el-menu
             :default-active="defaultIndex"
-            class="el-menu-demo"
             mode="horizontal"
             @select="handleSelect"
             background-color="#242f42"
@@ -90,8 +89,8 @@
                 }
             },
             // 侧边栏折叠
-            collapseChange(){
-                store.commit("setMainMenuItemCollapse");
+            toIndex(){
+                this.$router.push("/");
             },
             // 全屏事件
             handleFullScreen(){
@@ -182,6 +181,9 @@
     }
     .header .main-menu{
         float: left;
+        ::after {
+            clear: none;
+        }
         li{
             height:$height;
         }

@@ -3,58 +3,35 @@
     padding: 0;
 }
 
-html,
-body,
-#app,
-.wrapper {
+html,body{
     width: 100%;
-    height: 100%;
-    overflow: hidden;
 }
 
 body {
     font-family: 'PingFang SC', "Helvetica Neue", Helvetica, "microsoft yahei", arial, STHeiTi, sans-serif;
+    overflow-x: auto;
+    overflow-y: scroll;
 }
 
 a {
     text-decoration: none
 }
-.content-box {
-    position: absolute;
-    left: 200px;
-    right: 0;
-    top: 0;
-    -webkit-transition: left .3s ease-in-out;
-    transition: left .3s ease-in-out;
-    height: 100%;
-    overflow-y: hidden;
-}
 
-.content{
-    position: relative;
-    left:0;
-    top:0;
-    width: 100%;
-    padding: 20px;
-    padding-bottom: 50px;
-    box-sizing: border-box;
-    height: 100%;
-    overflow-y: auto;
+/* 左侧导航*/
+#sidebar-el-menu .el-submenu{
+    padding-left:0 !important;
 }
-/* 
-[v-cloak] {
-    display: none !important;
-} */
-
+#sidebar-el-menu .el-submenu .el-submenu__title{
+    padding-left:10px !important;
+    height:46px;
+    line-height:46px;
+}
 .content-collapse {
     left: 65px;
 }
 
-.container {
-    padding: 30px;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+[v-cloak] {
+    display: none !important;
 }
 
 .crumbs {

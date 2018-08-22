@@ -11,10 +11,38 @@ export default {
             index: '/table',
             title: '基础表格'
         },
+        // {
+        //     icon: 'el-icon-tickets',
+        //     index: '/table17',
+        //     title: '基础表格'
+        // },
+        // {
+        //     icon: 'el-icon-tickets',
+        //     index: '/table13',
+        //     title: '基础表格'
+        // },{
+        //     icon: 'el-icon-tickets',
+        //     index: '/table14',
+        //     title: '基础表格'
+        // },{
+        //     icon: 'el-icon-tickets',
+        //     index: '/table15',
+        //     title: '基础表格'
+        // },
+        // {
+        //     icon: 'el-icon-tickets',
+        //     index: '/table16',
+        //     title: '基础表格'
+        // },
         {
             icon: 'el-icon-message',
             index: '/tabs',
             title: 'tab选项卡'
+        },
+        {
+            icon: 'el-icon-star-on',
+            index: '/charts',
+            title: 'schart图表'
         },
         {
             icon: 'el-icon-date',

@@ -1,17 +1,89 @@
 <template>
     <div class="table">
-        <div class="container">
-            <div class="handle-box">
-                <el-button type="primary" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
-                <el-select v-model="select_cate" placeholder="筛选省份" class="handle-select mr10" closable>
-                    <el-option key="1" label="广东省" value="广东省"></el-option>
-                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
-                </el-select>
-                <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="search" @click="search">搜索</el-button>
+        <div class="container" style="font-size:12px;">
+            <div class="jy-search-wrapper" style="position: inherit">
+                <table style="background-color:#eee;width:100%;padding:10px 0;">
+                    <tr>
+                        <td>关键字：</td>
+                        <td colspan="3">
+                            <el-input type="text" ng-model="params.key" class="jy-text"
+                                placeholder="案源编号、产证地址、行政区"/>
+                        </td>
+                        <td>分行：</td>
+                        <td>
+                            <el-input type="text" ng-model="params.key" class="jy-text"
+                                placeholder="案源编号、产证地址、行政区"/>
+                        </td>
+                        <td rowspan="4" style="width:100px;text-align:center">
+                            <el-button type="primary" v-privilegePoint="'queryEmp'">查询</el-button>
+                            <br/>
+                            <br/>
+                            <el-button type="primary" v-privilegePoint="'export'">导出</el-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>签约日期：</td>
+                        <td>
+                            <el-date-picker v-model="cdate" style="width:150px;" placeholder="请选择"></el-date-picker>
+                            <span>-</span>
+                            <el-date-picker v-model="cdate" style="width:150px;" placeholder="请选择"></el-date-picker>
+                        </td>
+                        <td>交易进度：</td>
+                        <td  style="width:150px">
+                            <el-select v-model="chooice" empty-option-text="请选择">
+                                <el-option v-for="option in options" :key="option.key" :label="option.label" :value="option.value"></el-option>
+                            </el-select>
+                        </td>
+                        <td>跟进管家：</td>
+                        <td  style="width:150px">
+                            <el-input type="text" ng-model="params.key" class="jy-text"
+                                placeholder="案源编号、产证地址、行政区"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>最晚交易日：</td>
+                        <td>
+                            <el-date-picker v-model="cdate" style="width:150px;" placeholder="请选择"></el-date-picker>
+                            <span>-</span>
+                            <el-date-picker v-model="cdate" style="width:150px;" placeholder="请选择"></el-date-picker>
+                        </td>
+                        <td>贷款进度：</td>
+                        <td>
+                            <el-select v-model="chooice"  style="width: 166px" empty-option-text="请选择">
+                                <el-option v-for="option in options" :key="option.key" :label="option.label" :value="option.value"></el-option>
+                            </el-select>
+                        </td>
+                        <td>外区跟进：</td>
+                        <td>
+                            <el-select v-model="chooice" empty-option-text="请选择">
+                                <el-option v-for="option in options" :key="option.key" :label="option.label" :value="option.value"></el-option>
+                            </el-select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>最晚交易日：</td>
+                        <td>
+                            <el-date-picker v-model="cdate" style="width:310px;" placeholder="请选择"></el-date-picker>
+                        </td>
+                        <td>贷款进度：</td>
+                        <td>
+                            <el-select v-model="chooice"  style="width: 166px" empty-option-text="请选择">
+                                <el-option v-for="option in options" :key="option.key" :label="option.label" :value="option.value"></el-option>
+                            </el-select>
+                        </td>
+                        <td>外区跟进：</td>
+                        <td>
+                            <el-select v-model="chooice" empty-option-text="请选择">
+                                <el-option v-for="option in options" :key="option.key" :label="option.label" :value="option.value"></el-option>
+                            </el-select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div style="margin:15px 0;">
+                <span class="left">共计 <b class="green">123</b> 条结果</span>
             </div>
             <el-table style="width: 100%" :data="data" border ref="multipleTable" @selection-change="handleSelectionChange">
-                <el-table-column type="selection"></el-table-column>
                 <el-table-column prop="date" label="日期" >
                 </el-table-column>
                 <el-table-column prop="name" label="姓名" >
@@ -30,7 +102,6 @@
                 </el-pagination>
             </div> -->
         </div>
-
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
             <el-form ref="form" :model="form" label-width="50px">
@@ -68,6 +139,8 @@
         name: 'basetable',
         data() {
             return {
+                options:[],
+                cdate:'',
                 url: './static/vuetable.json',
                 tableData: [],
                 cur_page: 1,
@@ -78,6 +151,8 @@
                 is_search: false,
                 editVisible: false,
                 delVisible: false,
+                quickParam:{},
+                chooice:'',
                 form: {
                     name: '',
                     date: '',
@@ -227,13 +302,15 @@
     .handle-box {
         margin-bottom: 20px;
     }
-
+    table tr{
+        margin:10px;
+    }
     .handle-select {
         width: 120px;
     }
 
     .handle-input {
-        width: 300px;
+        /* width: 300px; */
         display: inline-block;
     }
     .del-dialog-cnt{

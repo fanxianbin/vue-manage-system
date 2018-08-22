@@ -8,7 +8,7 @@ export default {
         },
         {
             icon: 'el-icon-star-on',
-            index: '/charts',
+            index: '/charts2',
             title: 'schart图表'
         }
     ]
