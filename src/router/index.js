@@ -100,6 +100,18 @@ let router = new VueRouter({
             component: resolve => require(['../components/page/403.vue'], resolve)
         },
         {
+            path:'/configList',
+            component: resolve => require(['../components/zhushou/configList.vue'], resolve)
+        },
+        {
+            path:'/updateConfig',
+            component: resolve => require(['../components/zhushou/updateConfig.vue'], resolve)
+        },
+        {
+            path:'/index',
+            component: resolve => require(['../components/zhushou/index.vue'], resolve)
+        },
+        {
             path: '*',
             redirect: '/404'
         }

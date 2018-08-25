@@ -9,10 +9,56 @@ html,body{
 
 body {
     font-family: 'PingFang SC', "Helvetica Neue", Helvetica, "microsoft yahei", arial, STHeiTi, sans-serif;
-    overflow-x: auto;
-    overflow-y: scroll;
+    /* overflow-x: hidden !important; */
+    overflow-y: scroll !important;
+    background-color: rgb(240,242, 245);
 }
-
+.bg-white{
+    background-color:white;
+}
+.border-radius-5{
+    border-radius: 5px;
+}
+.border-radius-8{
+    border-radius: 8px;
+}
+.border-radius-10{
+    border-radius: 10px;
+}
+.border-radius-12{
+    border-radius: 12px;
+}
+.border-radius-15{
+    border-radius: 15px;
+}
+.border-radius-20{
+    border-radius: 20px;
+}
+.mt-10{
+    margin:10px;
+}
+.mt-15{
+    margin:15px;
+}
+.mt-20{
+    margin:20px;
+}
+.clearfix {
+    zoom: 1;
+}
+.clearfix:after {
+    clear: both;
+    content: "";
+    display: block;
+    font-size: 0;
+    height: 0;
+    visibility: hidden;
+}
+.shadow-normal{
+    -moz-box-shadow:2px 2px 5px rgb(206,207, 209);
+    -webkit-box-shadow:2px 2px 5px rgb(206,207, 209);
+    box-shadow:2px 2px 5px rgb(206,207, 209);
+}
 a {
     text-decoration: none
 }
